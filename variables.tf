@@ -15,25 +15,25 @@ variable "virtual_network_name" {
 }
 
 variable "env" {
-  description = "Name of the environment"
+  description = "(Required) Name of the environment"
   type        = string
   default = ""
 }
 
 variable "group" {
-  description = "Name of the group"
+  description = "(Required) Name of the group"
   type        = string
   default = ""
 }
 
 variable "project" {
-  description = "Name of the project"
+  description = "(Required) Name of the project"
   type        = string
   default = ""
 }
 
-variable "postfix" {
-  description = "(Optional) You can use a postfix to the name of the resource"
+variable "subnetShortName" {
+  description = "(Required) You can use a postfix to the name of the resource"
   type        = string
   default = ""
 }
