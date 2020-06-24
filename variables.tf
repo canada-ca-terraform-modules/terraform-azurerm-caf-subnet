@@ -2,10 +2,6 @@ variable "resource_group_name" {
   description = "(Required) Resource group name of the subnet to be created"    
 }
 
-variable "tags" {
-  description = "(Required) Tags to be applied to the AKV to be created"
-}
-
 variable "address_prefixes" {
   description = "(Required) address_prefixes"  
 }
