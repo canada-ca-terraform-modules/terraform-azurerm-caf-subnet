@@ -1,8 +1,10 @@
 locals {
   subnet-postfix = "_${var.subnetShortName}-snet"
-  subnet-regex   = regex("[0-9A-Za-z-_.]+", "${var.env}CNR-${var.group}_${var.project}")
-  subnet-substr  = substr(local.subnet-regex, 0, 80 - length(local.subnet-postfix))
-  subnet-fullName    = "${local.subnet-substr}${local.subnet-postfix}"
+  subnet-regex   = regex("[0-9A-Za-z-_.]+", local.postfix)
+  vnet-prefix = replace(var.virtual_network_name, "-vnet", "")
+  vnet-regex = regex("[0-9A-Za-z-_.]+", local.vnet-prefix)
+  subnet-substr  = substr(local.subnet-regex, 0, 80 - length(local.subnet-regex))
+  subnet-fullName    = "${local.subnet-substr}${local.subnet-regex}"
 }
 
 resource "azurerm_subnet" "subnet" {
