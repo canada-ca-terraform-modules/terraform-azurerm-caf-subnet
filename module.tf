@@ -1,6 +1,6 @@
 locals {
   subnet-postfix = "_${var.subnetShortName}-snet"
-  subnet-regex   = regex("[0-9A-Za-z-_.]+", local.postfix)
+  subnet-regex   = regex("[0-9A-Za-z-_.]+", local.subnet-postfix)
   vnet-prefix = replace(var.virtual_network_name, "-vnet", "")
   vnet-regex = regex("[0-9A-Za-z-_.]+", local.vnet-prefix)
   subnet-substr  = substr(local.subnet-regex, 0, 80 - length(local.subnet-regex))
