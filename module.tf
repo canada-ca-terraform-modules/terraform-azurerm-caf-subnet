@@ -1,12 +1,12 @@
 locals {
-  name-regex = "/[^0-9A-Za-z-_.]/" # Anti-pattern to match all characters not in: 0-9 a-z A-Z -
-  subnet-postfix = "_${var.subnetShortName}-snet"
+  name-regex             = "/[^0-9A-Za-z-_.]/" # Anti-pattern to match all characters not in: 0-9 a-z A-Z -
+  subnet-postfix         = "_${var.subnetShortName}-snet"
   subnet-postfix_replace = replace(local.subnet-postfix, "_", "-")
-  subnet-regex_compliant   = replace(local.subnet-postfix_replace, local.name-regex, "")
-  vnet-prefix = replace(var.virtual_network_name, "-vnet", "")
-  vnet-regex_compliant = replace(local.vnet-prefix, local.name-regex, "")
-  vnet-substr  = substr(local.name-regex_compliant, 0, 80 - length(local.subnet-regex_compliant))
-  subnet-fullName    = "${local.vnet-substr}${local.subnet-regex_compliant}"
+  subnet-regex_compliant = replace(local.subnet-postfix_replace, local.name-regex, "")
+  vnet-prefix            = replace(var.virtual_network_name, "-vnet", "")
+  vnet-regex_compliant   = replace(local.vnet-prefix, local.name-regex, "")
+  vnet-substr            = substr(local.vnet-regex_compliant, 0, 80 - length(local.subnet-regex_compliant))
+  subnet-fullName        = "${local.vnet-substr}${local.subnet-regex_compliant}"
 }
 
 resource "azurerm_subnet" "subnet" {
