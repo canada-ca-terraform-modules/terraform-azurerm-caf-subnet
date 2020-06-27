@@ -1,6 +1,6 @@
 locals {
   name-regex           = "/[^0-9A-Za-z-_.]/" # Anti-pattern to match all characters not in: 0-9 a-z A-Z -
-  vnet-prefix          = replace(var.virtual_network_name, "-vnet", "")
+  vnet-prefix          = replace(var.virtual_network.name, "-vnet", "")
   vnet-regex_compliant = replace(local.vnet-prefix, local.name-regex, "")
   #subnet-postfix         = "_${var.userDefinedString}-snet"
   #subnet-regex_compliant = replace(local.subnet-postfix, local.name-regex, "")
