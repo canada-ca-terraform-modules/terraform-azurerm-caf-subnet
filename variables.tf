@@ -15,13 +15,3 @@ variable "userDefinedString" {
   type        = string
   default     = ""
 }
-
-variable "route_table" {
-  description = "(Optional) Route table to associate to subnet"
-  default     = null
-}
-
-variable "network_security_group" {
-  description = "(Optional) NSG to associate to subnet"
-  default     = null
-}
