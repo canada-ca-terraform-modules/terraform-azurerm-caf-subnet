@@ -18,15 +18,15 @@ resource azurerm_subnet subnet {
 }
 
 resource azurerm_subnet_route_table_association route_table_association {
-  for_each       = var.route_tables
-  
+  for_each = var.route_tables
+
   subnet_id      = azurerm_subnet.subnet[each.key].id
   route_table_id = each.value.route_table.id
 }
 
 resource azurerm_subnet_network_security_group_association network_security_group_association {
-  for_each                  = var.network_security_group
-  
+  for_each = var.network_security_group
+
   subnet_id                 = azurerm_subnet.subnet[each.key].id
   network_security_group_id = each.value.network_security_group.id
 }

@@ -16,10 +16,10 @@ variable "subnets" {
 
 variable "route_tables" {
   description = "(Optional) map of subnet to route table"
-  default = {}
+  default     = {}
 }
 
 variable "network_security_group" {
   description = "(Optional) map of subnet to NSG"
-  default = {}
+  default     = {}
 }
