@@ -2,16 +2,18 @@ variable "resource_group" {
   description = "(Required) Resource group object of the subnet to be created"
 }
 
-variable "address_prefixes" {
-  description = "(Required) address_prefixes"
+variable "env" {
+  description = "env"
 }
 
 variable "virtual_network" {
   description = "(Required) virtual_network object"
 }
 
-variable "userDefinedString" {
-  description = "(Required) You can use a postfix to the name of the resource"
-  type        = string
-  default     = ""
+variable "subnets" {
+  description = "(Required) map of subnets"
+}
+
+variable "route_tables" {
+  description = "(Optional) map of subnet to route table"
 }
