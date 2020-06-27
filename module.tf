@@ -16,9 +16,9 @@ resource azurerm_subnet subnet {
 }
 
 resource azurerm_subnet_route_table_association Project_MAZ-rta {
-  count = var.azurerm_route_table != null ? 1 : 0
+  count = var.route_table != null ? 1 : 0
   subnet_id      = azurerm_subnet.subnet.id
-  route_table_id = var.azurerm_route_table.id
+  route_table_id = var.route_table.id
 }
 
 resource azurerm_subnet_network_security_group_association Project_OZ-nsg-Association {

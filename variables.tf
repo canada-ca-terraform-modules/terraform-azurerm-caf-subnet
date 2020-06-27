@@ -16,7 +16,7 @@ variable "subnetShortName" {
   default     = ""
 }
 
-variable "azurerm_route_table" {
+variable "route_table" {
   description = "(Optional) Route table to associate to subnet"
   default     = null
 }
