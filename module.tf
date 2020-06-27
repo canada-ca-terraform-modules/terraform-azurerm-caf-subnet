@@ -15,14 +15,14 @@ resource azurerm_subnet subnet {
   address_prefixes     = var.address_prefixes
 }
 
-resource azurerm_subnet_route_table_association Project_MAZ-rta {
-  count = var.route_table != null ? 1 : 0
+resource azurerm_subnet_route_table_association route_table_association {
+  count          = var.route_table != null ? 1 : 0
   subnet_id      = azurerm_subnet.subnet.id
   route_table_id = var.route_table.id
 }
 
-resource azurerm_subnet_network_security_group_association Project_OZ-nsg-Association {
-  count = var.network_security_group != null ? 1 : 0
+resource azurerm_subnet_network_security_group_association network_security_group_association {
+  count                     = var.network_security_group != null ? 1 : 0
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = var.network_security_group.id
 }
