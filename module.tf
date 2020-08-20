@@ -15,6 +15,7 @@ resource azurerm_subnet subnet {
   virtual_network_name = var.virtual_network.name
   resource_group_name  = var.resource_group.name
   address_prefixes     = each.value.address_prefixes
+  service_endpoints    = lookup(each.value, "service_endpoints", null)
 }
 
 resource azurerm_subnet_route_table_association route_table_association {
