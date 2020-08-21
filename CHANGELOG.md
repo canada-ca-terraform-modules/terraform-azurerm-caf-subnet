@@ -1,3 +1,16 @@
+## v1.1.0 (Aug 2020)
+
+FEATURES: 
+* **new feature:**  Adding support for optional subnet parameters:
+
+  - service_endpoints
+  - enforce_private_link_service_network_policies
+  - enforce_private_link_endpoint_network_policies
+
+IMPROVEMENTS:
+
+BUGS:
+
 ## v1.0.1 (June 2020)
 
 FEATURES: 
