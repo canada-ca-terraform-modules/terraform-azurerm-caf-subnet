@@ -16,7 +16,6 @@ resource azurerm_subnet subnet {
   resource_group_name                            = var.resource_group.name
   address_prefixes                               = lookup(each.value, "address_prefixes", null)
   service_endpoints                              = lookup(each.value, "service_endpoints", null)
-  delegation                                     = lookup(each.value, "delegation", {})
   enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
   enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
 }
