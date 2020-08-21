@@ -1,3 +1,14 @@
+## v1.1.1 (Aug 2020)
+
+FEATURES: 
+* **new feature:**  Adding support for optional subnet parameters:
+
+  - delegation
+
+IMPROVEMENTS:
+
+BUGS:
+
 ## v1.1.0 (Aug 2020)
 
 FEATURES: 

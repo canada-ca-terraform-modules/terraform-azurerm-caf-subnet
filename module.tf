@@ -18,6 +18,19 @@ resource azurerm_subnet subnet {
   service_endpoints                              = lookup(each.value, "service_endpoints", null)
   enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
   enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
+
+  dynamic "delegation" {
+    for_each = lookup(each.value, "delegation", {}) != {} ? [1] : []
+
+    content {
+      name = lookup(each.value.delegation, "name", null)
+
+      service_delegation {
+        name    = lookup(each.value.delegation.service_delegation, "name", null)
+        actions = lookup(each.value.delegation.service_delegation, "actions", null)
+      }
+    }
+  }
 }
 
 resource azurerm_subnet_route_table_association route_table_association {
