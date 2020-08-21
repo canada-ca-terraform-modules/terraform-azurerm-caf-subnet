@@ -11,11 +11,14 @@ locals {
 resource azurerm_subnet subnet {
   for_each = var.subnets
 
-  name                 = "${substr(local.vnet-regex_compliant, 0, 80 - length(replace("_${each.key}-snet", local.name-regex, "")))}${replace("_${each.key}-snet", local.name-regex, "")}"
-  virtual_network_name = var.virtual_network.name
-  resource_group_name  = var.resource_group.name
-  address_prefixes     = each.value.address_prefixes
-  service_endpoints    = lookup(each.value, "service_endpoints", null)
+  name                                           = "${substr(local.vnet-regex_compliant, 0, 80 - length(replace("_${each.key}-snet", local.name-regex, "")))}${replace("_${each.key}-snet", local.name-regex, "")}"
+  virtual_network_name                           = var.virtual_network.name
+  resource_group_name                            = var.resource_group.name
+  address_prefixes                               = lookup(each.value, "address_prefixes", null)
+  service_endpoints                              = lookup(each.value, "service_endpoints", null)
+  delegation                                     = lookup(each.value, "delegation", null)
+  enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
+  enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
 }
 
 resource azurerm_subnet_route_table_association route_table_association {
