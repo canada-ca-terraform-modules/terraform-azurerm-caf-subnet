@@ -1,25 +1,31 @@
 variable "resource_group" {
-  description = "(Required) Resource group object of the subnet to be created"
+  description = "Resource group object of the AKV to be created"
+  type        = any
 }
 
 variable "env" {
-  description = "env"
+  description = "You can use a prefix to add to the list of resource groups you want to create"
+  type        = string
 }
 
 variable "virtual_network" {
-  description = "(Required) virtual_network object"
+  description = "virtual_network object"
+  type        = any
 }
 
 variable "subnets" {
-  description = "(Required) map of subnets"
+  description = "Map of subnets"
+  type        = any
 }
 
 variable "route_tables" {
-  description = "(Optional) map of subnet to route table"
+  description = "Map of subnet to route table"
+  type        = any
   default     = {}
 }
 
 variable "network_security_group" {
-  description = "(Optional) map of subnet to NSG"
+  description = "Map of subnet to NSG"
+  type        = any
   default     = {}
 }
