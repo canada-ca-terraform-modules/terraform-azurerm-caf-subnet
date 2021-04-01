@@ -1,19 +1,6 @@
-#  Local .terraform directories
-**/.terraform/*
-
-# .tfstate files
-*.tfstate
-*.tfstate.*
-
-# .tfplan files
-*.tfplan
-
-# .tfvars files
-*.tfvars
-
-#vscode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+test/.terraform.tfstate.lock.info
+test/terraform.tfstate.backup
+test/terraform.tfstate
+test/.terraform
+test/crash.log
+.terraform/plugins/windows_amd64/lock.json
