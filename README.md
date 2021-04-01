@@ -32,6 +32,19 @@ module test-snet {
 |------|---------|
 | azurerm | >= 2.36.0 |
 
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [azurerm_client_config](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) |
+| [azurerm_subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) |
+| [azurerm_subnet_network_security_group_association](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet_network_security_group_association) |
+| [azurerm_subnet_route_table_association](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet_route_table_association) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -48,4 +61,3 @@ module test-snet {
 | Name | Description |
 |------|-------------|
 | object | Returns the full Azure Subnet Object |
-
