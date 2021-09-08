@@ -13,19 +13,7 @@ variable "virtual_network" {
   type        = any
 }
 
-variable "subnets" {
+variable "subnet" {
   description = "Map of subnets"
   type        = any
-}
-
-variable "route_tables" {
-  description = "Map of subnet to route table"
-  type        = any
-  default     = {}
-}
-
-variable "network_security_group" {
-  description = "Map of subnet to NSG"
-  type        = any
-  default     = {}
 }
