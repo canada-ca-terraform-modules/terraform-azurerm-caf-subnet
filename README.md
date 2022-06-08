@@ -56,7 +56,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_address_prefix"></a> [address\_prefix](#output\_address\_prefix) | Returns the Azure Subnet address\_prefix |
 | <a name="output_address_prefixes"></a> [address\_prefixes](#output\_address\_prefixes) | Returns the Azure Subnet address\_prefixes |
 | <a name="output_id"></a> [id](#output\_id) | Returns the Azure Subnet id |
 | <a name="output_object"></a> [object](#output\_object) | Returns the full Azure Subnet Object |
