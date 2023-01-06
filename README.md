@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 # Deploys an Azure Subnet
 
 Creates an Azure Subnet.
@@ -21,16 +22,13 @@ module test-snet {
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 2.36.0 |
+No requirements.
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 2.36.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 
 ## Modules
 
@@ -59,3 +57,4 @@ No modules.
 | <a name="output_address_prefixes"></a> [address\_prefixes](#output\_address\_prefixes) | Returns the Azure Subnet address\_prefixes |
 | <a name="output_id"></a> [id](#output\_id) | Returns the Azure Subnet id |
 | <a name="output_object"></a> [object](#output\_object) | Returns the full Azure Subnet Object |
+<!-- END_TF_DOCS -->
