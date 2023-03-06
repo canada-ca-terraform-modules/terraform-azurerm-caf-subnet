@@ -10,8 +10,8 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name                           = var.resource_group.name
   address_prefixes                              = lookup(var.subnet, "address_prefixes", null)
   service_endpoints                             = lookup(var.subnet, "service_endpoints", null)
-  private_link_service_network_policies_enabled = lookup(var.subnet, "private_link_service_network_policies_enabled", false)
-  private_endpoint_network_policies_enabled     = lookup(var.subnet, "private_endpoint_network_policies_enabled", false)
+  private_link_service_network_policies_enabled = lookup(var.subnet, "enforce_private_link_service_network_policies", false)
+  private_endpoint_network_policies_enabled     = lookup(var.subnet, "enforce_private_link_endpoint_network_policies", false)
 
   dynamic "delegation" {
     for_each = lookup(var.subnet, "delegation", {}) != {} ? [1] : []
