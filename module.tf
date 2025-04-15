@@ -5,7 +5,7 @@ locals {
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                                          = "${substr(local.vnet-regex_compliant, 0, 80 - length(replace("_${var.subnet.userDefinedString}-snet", local.name-regex, "")))}${replace("_${var.subnet.userDefinedString}-snet", local.name-regex, "")}"
+  name                                          = try(var.subnet.custom_name, null) != null ? var.subnet.custom_name : "${substr(local.vnet-regex_compliant, 0, 80 - length(replace("_${var.subnet.userDefinedString}-snet", local.name-regex, "")))}${replace("_${var.subnet.userDefinedString}-snet", local.name-regex, "")}"
   virtual_network_name                          = var.virtual_network.name
   resource_group_name                           = var.resource_group.name
   address_prefixes                              = try(var.subnet.address_prefixes, null)

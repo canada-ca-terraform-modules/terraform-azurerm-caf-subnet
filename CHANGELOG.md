@@ -1,3 +1,8 @@
+## v1.1.2 (Apr 2025)
+
+FEATURES:
+* Add support for subnet custom_name
+
 ## v1.1.1 (Aug 2020)
 
 FEATURES: 
