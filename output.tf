@@ -1,5 +1,6 @@
 output "object" {
   value       = azurerm_subnet.subnet
+  sensitive   = true
   description = "Returns the full Azure Subnet Object"
 }
 
