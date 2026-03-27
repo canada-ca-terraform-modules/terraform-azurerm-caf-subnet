@@ -3,6 +3,7 @@ variable "resource_group" {
   type        = any
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "env" {
   description = "You can use a prefix to add to the list of resource groups you want to create"
   type        = string
