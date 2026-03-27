@@ -1,3 +1,9 @@
+variable "subnets" {
+  description = "Map of subnet configuration objects"
+  type        = any
+  default     = {}
+}
+
 module "subnets" {
   source   = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-subnet?ref=v3.2.0"
   for_each = var.subnets
