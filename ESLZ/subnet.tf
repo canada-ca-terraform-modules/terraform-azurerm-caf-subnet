@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 1.9"
+}
+
 variable "subnets" {
   description = "Map of subnet configuration objects"
   type        = any
