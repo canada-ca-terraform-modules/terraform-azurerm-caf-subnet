@@ -1,82 +1,41 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-caf-subnet
+## Requirements
 
-Deploys an Azure Subnet following the SSC/CAF naming and tagging standard.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.0 |
 
-## Usage
+## Providers
 
-### ESLZ module block (`ESLZ/subnet.tf`)
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.0 |
 
-```hcl
-module "subnets" {
-  source          = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-subnet"
-  for_each        = var.subnets
-  env             = var.env
-  resource_group  = local.resource_groups[each.value.resource_group]
-  virtual_network = local.virtual_networks[each.value.virtual_network]
-  subnet          = each.value
-}
-```
+## Modules
 
-### ESLZ tfvars pattern (`ESLZ/subnet.tfvars`)
+No modules.
 
-```hcl
-subnets = {
-  app-subnet = {
-    userDefinedString = "app"
-    address_prefixes  = ["10.0.1.0/24"]
-    service_endpoints = ["Microsoft.KeyVault", "Microsoft.Storage"]
+## Resources
 
-    # azurerm >= 4.x: disable default SNAT outbound (recommended for production)
-    default_outbound_access_enabled = false
-
-    # azurerm >= 4.x: attach service endpoint policies
-    # service_endpoint_policy_ids = ["/subscriptions/.../serviceEndpointPolicies/policy"]
-
-    # azurerm >= 4.x: IPAM pool (mutually exclusive with address_prefixes)
-    # ip_address_pool = { id = "/subscriptions/.../ipamPools/pool1", number_of_ip_addresses = "256" }
-  }
-}
-```
+| Name | Type |
+|------|------|
+| [azurerm_subnet.subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 
 ## Inputs
 
-| Name | Type | Default | Description |
-|---|---|---|---|
-| `env` | `string` | required | Environment prefix (e.g. Dev, Prod) |
-| `resource_group` | `any` | required | Resource group object containing `.name` |
-| `virtual_network` | `any` | required | Virtual network object containing `.name` |
-| `subnet` | `any` | required | Subnet configuration object (see below) |
-
-### `subnet` object keys
-
-| Key | Type | Default | Description |
-|---|---|---|---|
-| `userDefinedString` | string | required | Suffix used in naming formula |
-| `address_prefixes` | list(string) | `null` | CIDR address prefixes — mutually exclusive with `ip_address_pool` |
-| `custom_name` | string | `null` | Override the generated name |
-| `service_endpoints` | list(string) | `null` | Service endpoints to associate |
-| `service_endpoint_policy_ids` | list(string) | `null` | **New in azurerm 4.x** — service endpoint policy IDs |
-| `default_outbound_access_enabled` | bool | `true` | **New in azurerm 4.x** — enable default SNAT outbound access |
-| `sharing_scope` | string | `null` | **New in azurerm 4.x** — `Tenant` (registered users only) |
-| `private_endpoint_network_policies` | string | `"Disabled"` | `Disabled` \| `Enabled` \| `NetworkSecurityGroupEnabled` \| `RouteTableEnabled` |
-| `private_link_service_network_policies_enabled` | bool | `true` | Set `false` when hosting a Private Link Service |
-| `delegation` | object | `{}` | Service delegation block — see tfvars example |
-| `ip_address_pool` | object | `null` | **New in azurerm 4.x** — Network Manager IPAM pool |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_env"></a> [env](#input\_env) | You can use a prefix to add to the list of resource groups you want to create | `string` | n/a | yes |
+| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Resource group object of the AKV to be created | `any` | n/a | yes |
+| <a name="input_subnet"></a> [subnet](#input\_subnet) | Map of subnets | `any` | n/a | yes |
+| <a name="input_virtual_network"></a> [virtual\_network](#input\_virtual\_network) | virtual\_network object | `any` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
-|---|---|
-| `object` | Full subnet resource object (`sensitive = true`) |
-| `address_prefixes` | Subnet address prefixes |
-| `id` | Subnet resource ID |
-
-## Requirements
-
-| Name | Version |
-|---|---|
-| terraform | `>= 1.9` |
-| azurerm | `~> 4.0` |
-
+|------|-------------|
+| <a name="output_address_prefixes"></a> [address\_prefixes](#output\_address\_prefixes) | Returns the Azure Subnet address\_prefixes |
+| <a name="output_id"></a> [id](#output\_id) | Returns the Azure Subnet id |
+| <a name="output_object"></a> [object](#output\_object) | Returns the full Azure Subnet Object |
 <!-- END_TF_DOCS -->
