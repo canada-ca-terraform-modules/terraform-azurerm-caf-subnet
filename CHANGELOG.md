@@ -28,19 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New optional `subnet.service_endpoint` tfvars key (list of objects with `service` and
   `network_identifier`) for callers who need to pin a `network_identifier` per service
   endpoint (azurerm >= 5.x).
-- New optional `subnet.network_security_group_id_wo` / `_wo_version` and
-  `subnet.route_table_id_wo` / `_wo_version` tfvars keys, passed through to the new
-  write-only NSG/Route Table association arguments on `azurerm_subnet` (azurerm >= 5.x).
-  Intended only for Azure Policy environments that require an NSG/Route Table at subnet
-  creation time — prefer the dedicated
-  `azurerm_subnet_network_security_group_association` /
-  `azurerm_subnet_route_table_association` resources otherwise.
 - New `network_security_group_id` and `route_table_id` outputs, exposing the new
   attributes azurerm 5.0 exports on `azurerm_subnet`.
 - `tests/subnet.tftest.hcl`: added `service_endpoint_new_format` and
-  `network_security_group_and_route_table_wo` runs; fixed the `service_endpoints` run's
-  assertion to read the new `service_endpoint` block instead of the removed
-  `service_endpoints` attribute.
+  `service_endpoint_null_values` runs; fixed the `service_endpoints` run's assertion to
+  read the new `service_endpoint` block instead of the removed `service_endpoints`
+  attribute.
 - `tests/upgrade_compat.tftest.hcl`: added `legacy_service_endpoints_list_format` run to
   verify pre-5.x callers using `service_endpoints` still produce an equivalent plan.
 

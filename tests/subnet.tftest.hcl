@@ -107,28 +107,21 @@ run "service_endpoint_new_format" {
   }
 }
 
-run "network_security_group_and_route_table_wo" {
+run "service_endpoint_null_values" {
   command = plan
 
   variables {
     subnet = {
-      userDefinedString                    = "app"
-      address_prefixes                     = ["10.0.1.0/24"]
-      network_security_group_id_wo         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/networkSecurityGroups/nsg1"
-      network_security_group_id_wo_version = 1
-      route_table_id_wo                    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/routeTables/rt1"
-      route_table_id_wo_version            = 1
+      userDefinedString = "app"
+      address_prefixes  = ["10.0.1.0/24"]
+      service_endpoints = null
+      service_endpoint  = null
     }
   }
 
   assert {
-    condition     = azurerm_subnet.subnet.network_security_group_id_wo_version == 1
-    error_message = "network_security_group_id_wo_version must be configurable (azurerm >= 5.x)"
-  }
-
-  assert {
-    condition     = azurerm_subnet.subnet.route_table_id_wo_version == 1
-    error_message = "route_table_id_wo_version must be configurable (azurerm >= 5.x)"
+    condition     = length(azurerm_subnet.subnet.service_endpoint) == 0
+    error_message = "Null service endpoint inputs must be treated the same as unset inputs"
   }
 }
 

@@ -7,10 +7,11 @@ locals {
   # one-or-more `service_endpoint` blocks. Normalize both the legacy list(string) format
   # (existing tfvars) and the new list(object) format (network_identifier support) into a
   # single list so existing callers produce an identical plan.
-  _service_endpoint_legacy = [
-    for s in try(var.subnet.service_endpoints, []) : { service = s, network_identifier = null }
-  ]
-  _service_endpoint_new        = try(var.subnet.service_endpoint, [])
+  _service_endpoint_legacy_values = try(var.subnet.service_endpoints, null)
+  _service_endpoint_legacy = local._service_endpoint_legacy_values != null ? [
+    for s in local._service_endpoint_legacy_values : { service = s, network_identifier = null }
+  ] : []
+  _service_endpoint_new        = try(var.subnet.service_endpoint, null) != null ? var.subnet.service_endpoint : []
   service_endpoints_normalized = concat(local._service_endpoint_legacy, local._service_endpoint_new)
 }
 
@@ -32,15 +33,6 @@ resource "azurerm_subnet" "subnet" {
   # Bug-fix: provider default is true; previous code defaulted to false
   private_link_service_network_policies_enabled = try(var.subnet.private_link_service_network_policies_enabled, true)
   private_endpoint_network_policies             = try(var.subnet.private_endpoint_network_policies, "Disabled")
-
-  # azurerm 5.x: write-only NSG/Route Table associations (Azure Policy environments that
-  # require NSG/Route Table at subnet creation time). Prefer the dedicated
-  # azurerm_subnet_network_security_group_association / azurerm_subnet_route_table_association
-  # resources instead when not constrained by policy.
-  network_security_group_id_wo         = try(var.subnet.network_security_group_id_wo, null)
-  network_security_group_id_wo_version = try(var.subnet.network_security_group_id_wo_version, null)
-  route_table_id_wo                    = try(var.subnet.route_table_id_wo, null)
-  route_table_id_wo_version            = try(var.subnet.route_table_id_wo_version, null)
 
   # azurerm 5.x: service_endpoints (list(string)) replaced by one-or-more service_endpoint blocks
   dynamic "service_endpoint" {

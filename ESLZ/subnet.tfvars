@@ -62,17 +62,4 @@ subnets = {
   #   ]
   # }
 
-  # --- WRITE-ONLY NSG / ROUTE TABLE ASSOCIATION (azurerm >= 5.x) ---
-  # Only meant for environments where Azure Policy requires a Network Security Group or
-  # Route Table to be specified at Subnet creation time. Prefer the dedicated
-  # azurerm_subnet_network_security_group_association / azurerm_subnet_route_table_association
-  # resources otherwise.
-  # policy-constrained-subnet = {
-  #   userDefinedString                    = "pol"
-  #   address_prefixes                     = ["10.0.5.0/24"]
-  #   network_security_group_id_wo         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/networkSecurityGroups/nsg1"
-  #   network_security_group_id_wo_version = 1
-  #   route_table_id_wo                    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/routeTables/rt1"
-  #   route_table_id_wo_version            = 1
-  # }
 }
