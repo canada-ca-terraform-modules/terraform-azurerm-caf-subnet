@@ -1,6 +1,10 @@
 # upgrade_compat.tftest.hcl
 # Verifies that callers using pre-4.x tfvars format still produce a valid plan,
 # ensuring no breaking changes were introduced during the azurerm 4.x upgrade.
+#
+# Also verifies that callers relying on the azurerm 4.x `service_endpoints` (list(string))
+# argument still produce an equivalent plan after the azurerm 5.x upgrade, where the
+# underlying resource argument was replaced by one-or-more `service_endpoint` blocks.
 
 mock_provider "azurerm" {}
 
@@ -66,5 +70,36 @@ run "legacy_private_link_explicitly_false" {
   assert {
     condition     = azurerm_subnet.subnet.private_link_service_network_policies_enabled == false
     error_message = "Explicit false must be honoured for backward compat"
+  }
+}
+
+# Simulate a pre-5.x caller using the removed `service_endpoints` (list(string)) argument —
+# plan must still succeed and produce an equivalent service_endpoint block per entry.
+run "legacy_service_endpoints_list_format" {
+  command = plan
+
+  variables {
+    env = "Prod"
+    resource_group = {
+      name = "rg-legacy"
+    }
+    virtual_network = {
+      name = "legacy-vnet"
+    }
+    subnet = {
+      userDefinedString = "aci"
+      address_prefixes  = ["10.1.3.0/24"]
+      service_endpoints = ["Microsoft.KeyVault", "Microsoft.Storage"]
+    }
+  }
+
+  assert {
+    condition     = length(azurerm_subnet.subnet.service_endpoint) == 2
+    error_message = "Legacy service_endpoints list must still resolve to service_endpoint blocks after azurerm 5.x upgrade"
+  }
+
+  assert {
+    condition     = contains([for se in azurerm_subnet.subnet.service_endpoint : se.service], "Microsoft.Storage")
+    error_message = "Legacy service_endpoints values must be preserved"
   }
 }

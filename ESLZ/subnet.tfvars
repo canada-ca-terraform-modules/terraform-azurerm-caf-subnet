@@ -49,4 +49,30 @@ subnets = {
   #     number_of_ip_addresses = "256"
   #   }
   # }
+
+  # --- SERVICE ENDPOINT EXAMPLE (azurerm >= 5.x) ---
+  # azurerm 5.x replaced the `service_endpoints` list(string) argument with one-or-more
+  # `service_endpoint` blocks. `service_endpoints` (below) is still accepted for backward
+  # compatibility; use `service_endpoint` when you need to pin a `network_identifier`.
+  # svc-endpoint-subnet = {
+  #   userDefinedString = "svcep"
+  #   address_prefixes  = ["10.0.4.0/24"]
+  #   service_endpoint = [
+  #     { service = "Microsoft.Sql", network_identifier = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/virtualNetworks/vnet/subnets/other-subnet" }
+  #   ]
+  # }
+
+  # --- WRITE-ONLY NSG / ROUTE TABLE ASSOCIATION (azurerm >= 5.x) ---
+  # Only meant for environments where Azure Policy requires a Network Security Group or
+  # Route Table to be specified at Subnet creation time. Prefer the dedicated
+  # azurerm_subnet_network_security_group_association / azurerm_subnet_route_table_association
+  # resources otherwise.
+  # policy-constrained-subnet = {
+  #   userDefinedString                    = "pol"
+  #   address_prefixes                     = ["10.0.5.0/24"]
+  #   network_security_group_id_wo         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/networkSecurityGroups/nsg1"
+  #   network_security_group_id_wo_version = 1
+  #   route_table_id_wo                    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/routeTables/rt1"
+  #   route_table_id_wo_version            = 1
+  # }
 }

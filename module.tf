@@ -2,6 +2,16 @@ locals {
   name-regex           = "/[^0-9A-Za-z-_.]/" # Anti-pattern to match all characters not in: 0-9 a-z A-Z -
   vnet-prefix          = replace(var.virtual_network.name, "-vnet", "")
   vnet-regex_compliant = replace(local.vnet-prefix, local.name-regex, "")
+
+  # azurerm 5.x: the `service_endpoints` (list(string)) argument was removed in favour of
+  # one-or-more `service_endpoint` blocks. Normalize both the legacy list(string) format
+  # (existing tfvars) and the new list(object) format (network_identifier support) into a
+  # single list so existing callers produce an identical plan.
+  _service_endpoint_legacy = [
+    for s in try(var.subnet.service_endpoints, []) : { service = s, network_identifier = null }
+  ]
+  _service_endpoint_new        = try(var.subnet.service_endpoint, [])
+  service_endpoints_normalized = concat(local._service_endpoint_legacy, local._service_endpoint_new)
 }
 
 resource "azurerm_subnet" "subnet" {
@@ -9,7 +19,6 @@ resource "azurerm_subnet" "subnet" {
   virtual_network_name = var.virtual_network.name
   resource_group_name  = var.resource_group.name
   address_prefixes     = try(var.subnet.address_prefixes, null)
-  service_endpoints    = try(var.subnet.service_endpoints, null)
 
   # azurerm 4.x: control whether default (SNAT) outbound access is permitted (provider default = true)
   default_outbound_access_enabled = try(var.subnet.default_outbound_access_enabled, true)
@@ -23,6 +32,25 @@ resource "azurerm_subnet" "subnet" {
   # Bug-fix: provider default is true; previous code defaulted to false
   private_link_service_network_policies_enabled = try(var.subnet.private_link_service_network_policies_enabled, true)
   private_endpoint_network_policies             = try(var.subnet.private_endpoint_network_policies, "Disabled")
+
+  # azurerm 5.x: write-only NSG/Route Table associations (Azure Policy environments that
+  # require NSG/Route Table at subnet creation time). Prefer the dedicated
+  # azurerm_subnet_network_security_group_association / azurerm_subnet_route_table_association
+  # resources instead when not constrained by policy.
+  network_security_group_id_wo         = try(var.subnet.network_security_group_id_wo, null)
+  network_security_group_id_wo_version = try(var.subnet.network_security_group_id_wo_version, null)
+  route_table_id_wo                    = try(var.subnet.route_table_id_wo, null)
+  route_table_id_wo_version            = try(var.subnet.route_table_id_wo_version, null)
+
+  # azurerm 5.x: service_endpoints (list(string)) replaced by one-or-more service_endpoint blocks
+  dynamic "service_endpoint" {
+    for_each = local.service_endpoints_normalized
+
+    content {
+      service            = service_endpoint.value.service
+      network_identifier = try(service_endpoint.value.network_identifier, null)
+    }
+  }
 
   dynamic "delegation" {
     for_each = lookup(var.subnet, "delegation", {}) != {} ? [1] : []

@@ -70,9 +70,65 @@ run "service_endpoints" {
     }
   }
 
+  # azurerm 5.x: service_endpoints (list(string)) argument was removed in favour of
+  # one-or-more service_endpoint blocks; legacy tfvars format must still work.
   assert {
-    condition     = length(azurerm_subnet.subnet.service_endpoints) == 2
-    error_message = "service_endpoints must be set when provided"
+    condition     = length(azurerm_subnet.subnet.service_endpoint) == 2
+    error_message = "service_endpoints (legacy list format) must produce a service_endpoint block per entry"
+  }
+
+  assert {
+    condition     = contains([for se in azurerm_subnet.subnet.service_endpoint : se.service], "Microsoft.KeyVault")
+    error_message = "service_endpoint block must carry over the legacy service_endpoints value"
+  }
+}
+
+run "service_endpoint_new_format" {
+  command = plan
+
+  variables {
+    subnet = {
+      userDefinedString = "app"
+      address_prefixes  = ["10.0.1.0/24"]
+      service_endpoint = [
+        { service = "Microsoft.Sql", network_identifier = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/virtualNetworks/vnet/subnets/subnet2" },
+      ]
+    }
+  }
+
+  assert {
+    condition     = length(azurerm_subnet.subnet.service_endpoint) == 1
+    error_message = "New service_endpoint object format must produce a service_endpoint block"
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.service_endpoint[0].network_identifier != null
+    error_message = "network_identifier must be set when provided via the new service_endpoint format"
+  }
+}
+
+run "network_security_group_and_route_table_wo" {
+  command = plan
+
+  variables {
+    subnet = {
+      userDefinedString                    = "app"
+      address_prefixes                     = ["10.0.1.0/24"]
+      network_security_group_id_wo         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/networkSecurityGroups/nsg1"
+      network_security_group_id_wo_version = 1
+      route_table_id_wo                    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/routeTables/rt1"
+      route_table_id_wo_version            = 1
+    }
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.network_security_group_id_wo_version == 1
+    error_message = "network_security_group_id_wo_version must be configurable (azurerm >= 5.x)"
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.route_table_id_wo_version == 1
+    error_message = "route_table_id_wo_version must be configurable (azurerm >= 5.x)"
   }
 }
 
