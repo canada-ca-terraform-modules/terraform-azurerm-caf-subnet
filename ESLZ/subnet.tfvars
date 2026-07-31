@@ -49,4 +49,17 @@ subnets = {
   #     number_of_ip_addresses = "256"
   #   }
   # }
+
+  # --- SERVICE ENDPOINT EXAMPLE (azurerm >= 5.x) ---
+  # azurerm 5.x replaced the `service_endpoints` list(string) argument with one-or-more
+  # `service_endpoint` blocks. `service_endpoints` (below) is still accepted for backward
+  # compatibility; use `service_endpoint` when you need to pin a `network_identifier`.
+  # svc-endpoint-subnet = {
+  #   userDefinedString = "svcep"
+  #   address_prefixes  = ["10.0.4.0/24"]
+  #   service_endpoint = [
+  #     { service = "Microsoft.Sql", network_identifier = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.Network/virtualNetworks/vnet/subnets/other-subnet" }
+  #   ]
+  # }
+
 }

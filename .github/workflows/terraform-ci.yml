@@ -10,9 +10,9 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
 
-      - uses: hashicorp/setup-terraform@v4.0.0
+      - uses: hashicorp/setup-terraform@v4.0.1
         with:
           terraform_version: "~> 1.9"
 
@@ -28,10 +28,13 @@ jobs:
       - name: terraform test
         run: terraform test
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v6.3.0
+        with:
+          tflint_version: v0.64.0
+
       - name: tflint init
-        run: |
-          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-          tflint --init
+        run: tflint --init
 
       - name: tflint
         run: tflint --recursive
