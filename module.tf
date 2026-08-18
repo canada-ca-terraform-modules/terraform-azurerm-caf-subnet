@@ -11,8 +11,14 @@ locals {
   _service_endpoint_legacy = local._service_endpoint_legacy_values != null ? [
     for s in local._service_endpoint_legacy_values : { service = s, network_identifier = null }
   ] : []
-  _service_endpoint_new        = try(var.subnet.service_endpoint, null) != null ? var.subnet.service_endpoint : []
-  service_endpoints_normalized = concat(local._service_endpoint_legacy, local._service_endpoint_new)
+  _service_endpoint_new = try(var.subnet.service_endpoint, null) != null ? var.subnet.service_endpoint : []
+  # Sort by service name to produce a deterministic order that matches the Azure API response,
+  # preventing plan churn when the provider reads blocks back in a different order than input.
+  _service_endpoints_unsorted = concat(local._service_endpoint_legacy, local._service_endpoint_new)
+  service_endpoints_normalized = [
+    for s in sort(local._service_endpoints_unsorted[*].service) :
+    [for ep in local._service_endpoints_unsorted : ep if ep.service == s][0]
+  ]
 }
 
 resource "azurerm_subnet" "subnet" {

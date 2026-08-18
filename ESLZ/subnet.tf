@@ -9,7 +9,7 @@ variable "subnets" {
 }
 
 module "subnets" {
-  source   = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-subnet?ref=v3.3.0"
+  source   = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-subnet?ref=v3.3.1"
   for_each = var.subnets
 
   env             = var.env
