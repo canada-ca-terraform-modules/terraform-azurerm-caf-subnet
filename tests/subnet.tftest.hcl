@@ -107,6 +107,57 @@ run "service_endpoint_new_format" {
   }
 }
 
+run "service_endpoint_order_independent_input_a" {
+  command = plan
+
+  # Regression test for azurerm 5.x service_endpoint block ordering churn:
+  # reordering entries in tfvars (same set, different input order) must NOT
+  # change the emitted service_endpoint block order, otherwise every reorder
+  # produces an unwanted "0 to add, N to change" plan diff.
+  variables {
+    subnet = {
+      userDefinedString = "app"
+      address_prefixes  = ["10.0.1.0/24"]
+      service_endpoints = ["Microsoft.KeyVault", "Microsoft.Storage"]
+    }
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.service_endpoint[0].service == "Microsoft.KeyVault"
+    error_message = "service_endpoint blocks must be emitted in deterministic (sorted) order"
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.service_endpoint[1].service == "Microsoft.Storage"
+    error_message = "service_endpoint blocks must be emitted in deterministic (sorted) order"
+  }
+}
+
+run "service_endpoint_order_independent_input_b" {
+  command = plan
+
+  # Same two endpoints as input_a, but reversed input order. Must produce the
+  # IDENTICAL emitted order as input_a — proving the output is independent of
+  # tfvars list ordering.
+  variables {
+    subnet = {
+      userDefinedString = "app"
+      address_prefixes  = ["10.0.1.0/24"]
+      service_endpoints = ["Microsoft.Storage", "Microsoft.KeyVault"]
+    }
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.service_endpoint[0].service == "Microsoft.KeyVault"
+    error_message = "Reordering the tfvars list must not change the emitted service_endpoint order (input-order sensitivity regression)"
+  }
+
+  assert {
+    condition     = azurerm_subnet.subnet.service_endpoint[1].service == "Microsoft.Storage"
+    error_message = "Reordering the tfvars list must not change the emitted service_endpoint order (input-order sensitivity regression)"
+  }
+}
+
 run "service_endpoint_null_values" {
   command = plan
 

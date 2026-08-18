@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `service_endpoint` blocks emitted in input order caused plan churn ("0 to add, N to
+  change") whenever a caller reordered entries in tfvars, or when the azurerm provider
+  read the blocks back in a different order than supplied. `service_endpoints_normalized`
+  now sorts entries by `service` name before rendering, producing a deterministic block
+  order regardless of tfvars input order.
+- Added `tests/subnet.tftest.hcl` regression runs `service_endpoint_order_independent_input_a`
+  / `_b` asserting that two tfvars inputs with the same service endpoints in reversed order
+  produce an identical emitted block order.
+- Bumped `ESLZ/subnet.tf` module ref from `v3.3.0` to `v3.3.1`.
+
+## [3.3.0]
+
 ### Changed
 
 - Upgraded provider constraint from `azurerm ~> 4.0` to `azurerm ~> 5.0`.
